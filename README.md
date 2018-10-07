@@ -1,5 +1,5 @@
 # txclipsvc
-A simple clipboard text service(both server and client side code) written in Golang and supports Windows, Linux and Mac OS.
+A simple clipboard text service(both server and client side code) written in Golang and supports Windows, Linux and Mac OS. It's convenient for tranfer text among multi devices. It can also used without client-side application(web based), or as a API web service.
 
 # Install
 
@@ -86,6 +86,20 @@ or
 > txclipsvc get -code="common"
 
 Retrieve the text for the specified code/user.
+
+# Use txClipSvc without any client installed
+
+You can get or set the text via any browser, if you don't need any client-side application installed. To set/save text, just browse to the right url, such as,
+
+> http://clip.yourdomain.com:7458/api?req=saveClip&code=common&text=abcde
+
+To get saved text, browse to,
+
+> http://clip.yourdomain.com:7458/api?req=getClip&code=common
+
+# Use txClipSvc as WEB API
+
+You can use txClipSvc as web API by accessing the URLs above with proper parameters(better in POST method).
 
 # Other comments
 
