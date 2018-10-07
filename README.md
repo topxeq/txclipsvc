@@ -3,9 +3,9 @@ A simple clipboard text service(both server and client side code) written in Gol
 
 # Install
 
-There is only one executable file for txClipSvc. It can run as a stand-alone server(or system service if you wish), as well as the client-side application. For client side, download the released zip file here, extract it to any directory, and it's ready to use then. For server side installation, please see the instructions below.
+There is only one executable file for txClipSvc. It can run as a stand-alone server(or system service if you wish), as well as the client-side application. For client side, download the released zip file [here](https://github.com/topxeq/txclipsvc/releases), extract it to any directory, and it's ready to use then. For server side installation, please see the instructions below.
 
-First, you need a Windows/Linux/MacOS server with at least one public IP(which could be accessed via Internet), and better have the adminitrator/root privilege of the server.
+First, you need a Windows/Linux/MacOS server with at least one public IP(which could be accessed via Internet), and better have the adminitrator/root privilege of the server. Then download the released zip file [here](https://github.com/topxeq/txclipsvc/releases), and extract it to your desired directory..
 
 In windows, run the following command in the CMD console with administrator privilege,
 > txclipsvc install
