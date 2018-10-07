@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-var versionG string = "0.90a"
+var versionG string = "0.91a"
 
 var defaultPortG string = "7458"
 var defaultBasePathG string
