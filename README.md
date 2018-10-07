@@ -52,9 +52,11 @@ Add a line of text in the config file(i.e. txclipsvc.cfg), the restart the servi
 # Client side guide
 To use the service, you should first edit the config file in the base directory first, if there is not, create one manually. Sample content of config file in client side is shown as below,
 
-> server=clip.youdomain.com
-> code=test
-> port=7458
+```
+server=clip.youdomain.com
+code=test
+port=7458
+```
 
 ## To save/set some text on the server-side
 
@@ -73,11 +75,13 @@ This will set the text from clipboard for the code/user "myself" in server-side.
 ## To get saved text from server-side
 
 > txclipsvc get
+
 The stored text in the server-side will be retrieved to the local clipboard, the cache file, and the standard ouput.
 
 or
 
 > txclipsvc get -code="common"
+
 Retrieve the text for the specified code/user.
 
 # Other comments
