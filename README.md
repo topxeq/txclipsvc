@@ -61,15 +61,18 @@ port=7458
 ## To save/set some text on the server-side
 
 > txclipsvc set -text="This is a pie."
+
 This will set the text for the code/user "test" in server-side.
 
 or if you don't specify any text in the command-line, and use the specified code,
 
 > txclipsvc save -code=myself
+
 This will set the text from clipboard for the code/user "myself" in server-side.
 
 or you can set it get the text from the cache file in the base directory,
 > txclipsvc save -file
+
 This will set the text from clipboard for the code/user "myself" in server-side.
 
 ## To get saved text from server-side
