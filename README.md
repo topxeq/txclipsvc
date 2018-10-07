@@ -83,4 +83,5 @@ Retrieve the text for the specified code/user.
 # Other comments
 
 - The maximum number of codes/users is set to 100, and the maximum text size to 8000 charactres now.
+- For Linux system without X-Server(use ssh, or use command-line-based terminal only), you may not be able to get the clipboard text, in that case, used the cache file instead, it's specially designed for use in this situation.
 - Any comments or suggestions, please send e-mail to topget@163.com .
