@@ -87,6 +87,14 @@ or
 
 Retrieve the text for the specified code/user.
 
+> txclipsvc get -code="common" -server=clip.yourdomain.com -port=7458 -v
+
+Retrieve the text for the specified code/user, server and port, also with verbose output.
+
+> txclipsvc get -base=.
+
+Retrieve the text for the specified code/user as above, but use current directory("." indicates the current directory where you run this application) as base directory.
+
 # Use txClipSvc without any client installed
 
 You can get or set the text via any browser, if you don't need any client-side application installed. To set/save text, just browse to the right url, such as,
