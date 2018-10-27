@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-var versionG string = "0.91a"
+var versionG string = "0.93a"
 
 var defaultPortG string = "7458"
 var defaultBasePathG string
@@ -331,7 +331,7 @@ func doApi(resA http.ResponseWriter, reqA *http.Request) string {
 	switch reqT {
 	case "":
 		return fmt.Sprintf("txClipSvc V%v, empty request", versionG)
-	case "saveClip":
+	case "saveClip", "setClip":
 		codeT := getFormValueWithDefaultValue(reqA, "code", "")
 
 		if strings.TrimSpace(codeT) == "" {
@@ -506,10 +506,13 @@ func runCmd(cmdLineA []string) {
 		}
 	}
 
+	verboseT := ifSwitchExists(cmdLineA, "-v")
+
 	ensureMakeDirs(basePathG)
 
 	if !fileExists(basePathG) {
-		fmt.Printf("base path not exists: %v\n", basePathG)
+		fmt.Printf("base path not exists: %v, use current directory instead\n", basePathG)
+		basePathG = "."
 		return
 	}
 
@@ -562,19 +565,28 @@ func runCmd(cmdLineA []string) {
 
 		var currentPortG = ""
 
-		if fileMapT == nil {
-			fileMapT = loadMapFromFile(filepath.Join(basePathG, defaultConfigFileNameG))
-		}
+		portT := getSwitchWithDefaultValue(cmdLineA, "-port=", "")
 
-		if fileMapT == nil {
-			currentPortG = defaultPortG
-		} else {
-			currentPortG, ok = fileMapT["port"]
-
-			if !ok {
-				currentPortG = defaultPortG
+		if portT == "" {
+			if fileMapT == nil {
+				fileMapT = loadMapFromFile(filepath.Join(basePathG, defaultConfigFileNameG))
 			}
+
+			if fileMapT == nil {
+				currentPortG = defaultPortG
+			} else {
+				currentPortG, ok = fileMapT["port"]
+
+				if !ok {
+					currentPortG = defaultPortG
+				}
+			}
+
+		} else {
+			currentPortG = portT
 		}
+
+		serverUrlG = getSwitchWithDefaultValue(cmdLineA, "-server=", "")
 
 		if serverUrlG == "" {
 			if fileMapT == nil {
@@ -593,9 +605,14 @@ func runCmd(cmdLineA []string) {
 				return
 			}
 
-			if !strings.HasPrefix(strings.ToLower(serverUrlG), "http") {
-				serverUrlG = fmt.Sprintf("http://%v:%v/api", serverUrlG, currentPortG)
-			}
+		}
+
+		if !strings.HasPrefix(strings.ToLower(serverUrlG), "http") {
+			serverUrlG = fmt.Sprintf("http://%v:%v/api", serverUrlG, currentPortG)
+		}
+
+		if verboseT {
+			fmt.Printf("retrieving text from %v, code: %v\n", serverUrlG, codeT)
 		}
 
 		postT := url.Values{}
@@ -605,7 +622,7 @@ func runCmd(cmdLineA []string) {
 
 		rs := downloadUtf8Page(serverUrlG, postT, 15)
 
-		addLineEndFlagT := ifSwitchExists(cmdLineA, "-withLineEnd")
+		addLineEndFlagT := ifSwitchExists(cmdLineA, "-withLineEnd") || ifSwitchExists(cmdLineA, "-L") || ifSwitchExists(cmdLineA, "-l")
 
 		if addLineEndFlagT {
 			fmt.Println(rs)
@@ -644,19 +661,28 @@ func runCmd(cmdLineA []string) {
 
 		var currentPortG = ""
 
-		if fileMapT == nil {
-			fileMapT = loadMapFromFile(filepath.Join(basePathG, defaultConfigFileNameG))
-		}
+		portT := getSwitchWithDefaultValue(cmdLineA, "-port=", "")
 
-		if fileMapT == nil {
-			currentPortG = defaultPortG
-		} else {
-			currentPortG, ok = fileMapT["port"]
-
-			if !ok {
-				currentPortG = defaultPortG
+		if portT == "" {
+			if fileMapT == nil {
+				fileMapT = loadMapFromFile(filepath.Join(basePathG, defaultConfigFileNameG))
 			}
+
+			if fileMapT == nil {
+				currentPortG = defaultPortG
+			} else {
+				currentPortG, ok = fileMapT["port"]
+
+				if !ok {
+					currentPortG = defaultPortG
+				}
+			}
+
+		} else {
+			currentPortG = portT
 		}
+
+		serverUrlG = getSwitchWithDefaultValue(cmdLineA, "-server=", "")
 
 		if serverUrlG == "" {
 			if fileMapT == nil {
@@ -675,9 +701,10 @@ func runCmd(cmdLineA []string) {
 				return
 			}
 
-			if !strings.HasPrefix(strings.ToLower(serverUrlG), "http") {
-				serverUrlG = fmt.Sprintf("http://%v:%v/api", serverUrlG, currentPortG)
-			}
+		}
+
+		if !strings.HasPrefix(strings.ToLower(serverUrlG), "http") {
+			serverUrlG = fmt.Sprintf("http://%v:%v/api", serverUrlG, currentPortG)
 		}
 
 		var textT string
@@ -695,6 +722,10 @@ func runCmd(cmdLineA []string) {
 		} else if textT, err = clipboard.ReadAll(); err != nil {
 			fmt.Printf("could not get text from clipboard: %v", err.Error())
 			return
+		}
+
+		if verboseT {
+			fmt.Printf("saving text to %v, code: %v\n", serverUrlG, codeT)
 		}
 
 		postT := url.Values{}
